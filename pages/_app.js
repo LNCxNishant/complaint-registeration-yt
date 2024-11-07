@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
   const clientID = '466a7ec885c491bf25d06b4471c97787';
 
   return (
-    <ThirdwebProvider desiredChainId={ChainId.Mumbai} clientId={clientID}>
+    <ThirdwebProvider activeChain={11155111} clientId={clientID}>
       {/* Rendering the main component */}
       <Component {...pageProps} />
       {/* Adding a toaster component */}

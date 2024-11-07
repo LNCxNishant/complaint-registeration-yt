@@ -11,22 +11,41 @@ const Complaint = () => {
     const { mutateAsync: fileComplaint } = useContractWrite(contract, "fileComplaint");
 
     const handleComplaint = async () => {
-        const notification = toast.loading("Filing Complaint");
-        try {
-            const data = await fileComplaint([title, description]);
-            toast.success(`Complaint Filed! Note Your ComplaintId:${nextId}`, {
+        const notification = toast.loading("Filing Complaint...");
+        
+        // Log title and description before calling the contract
+        console.log("Filing complaint with title:", title, "and description:", description);
+        
+        // Ensure that title and description are strings and not empty
+        if (!title || !description) {
+            toast.error("Please fill in both the title and description.", {
                 id: notification,
             });
-            console.info("contract call successs", data);
+            return;
+        }
+    
+        try {
+            // Pass title and description as arguments to fileComplaint
+            const data = await fileComplaint([title, description]);
+        
+            // Log the result of the contract call
+            console.log("Complaint filed successfully. Data:", data);
+    
+            toast.success(`Complaint Filed! Note Your ComplaintId:${nextId ? nextId.toString() : 'Loading...'}`, {
+                id: notification,
+            });
+    
+            // Reset fields after successful filing
             setTitle("");
             setDescription("");
         } catch (err) {
+            console.error("Contract call failure", err);
             toast.error("Whoops, something went wrong!", {
                 id: notification,
             });
-            console.error("contract call failure", err);
         }
-    }
+    };
+    
 
     return (
         <div className='complaint-container md: mr-[50px] md:ml-[50px]'>
